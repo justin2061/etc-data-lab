@@ -1,0 +1,58 @@
+CREATE TABLE IF NOT EXISTS etc.M06A (
+VehicleType STRING,
+DetectionTime_O TIMESTAMP,
+GantryID_O STRING,
+DetectionTime_D TIMESTAMP,
+GantryID_D STRING,
+TripLength FLOAT,
+TripEnd STRING,
+TripInformation STRING
+)
+CLUSTERED BY(GantryID_O) SORTED BY(DetectionTime_O) INTO 32 BUCKETS
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+;
+LOAD DATA LOCAL INPATH "/data2/workspace/etc/all_csv/*.csv" OVERWRITE INTO TABLE etc.M06A;
+
+
+CREATE TABLE IF NOT EXISTS etc.M06A (
+VehicleType STRING,
+DetectionTime_O TIMESTAMP,
+GantryID_O STRING,
+DetectionTime_D TIMESTAMP,
+GantryID_D STRING,
+TripLength FLOAT,
+TripEnd STRING,
+TripInformation STRING
+)
+CLUSTERED BY(GantryID_O) SORTED BY(DetectionTime_O) INTO 32 BUCKETS
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS SEQUENCEFILE
+;
+
+
+CREATE TABLE IF NOT EXISTS etc.M06A (
+VehicleType STRING,
+DetectionTime_O TIMESTAMP,
+GantryID_O STRING,
+DetectionTime_D TIMESTAMP,
+GantryID_D STRING,
+TripLength FLOAT,
+TripEnd STRING,
+TripInformation STRING
+)
+CLUSTERED BY(GantryID_O) SORTED BY(DetectionTime_O) INTO 32 BUCKETS
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+stored as orc tblproperties ("orc.compress"="NONE")
+;
+
+
+
+LOAD DATA LOCAL INPATH "/data2/workspace/etc/all_csv/TDCS_M06A_20160227_230000.csv" OVERWRITE INTO TABLE etc.M06A;
+INSERT OVERWRITE LOCAL DIRECTORY '/data2/workspace/etc/resample.csv' select * from m06a TABLESAMPLE(0.1 PERCENT);
+
+INSERT OVERWRITE LOCAL DIRECTORY '/data2/workspace/etc/resample_0509_1' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' select * from m06a TABLESAMPLE(BUCKET 3 OUT OF 32 ON DetectionTime_O);
+
+INSERT OVERWRITE LOCAL DIRECTORY '/data2/workspace/etc/resample_0509_01' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' select * from m06a TABLESAMPLE(100000 ROWS) where DetectionTime_O > '2015-01-01' and DetectionTime_O < '2015-02-01';
+
+/usr/bin/mysql -uetc_user -hlocalhost -p1qaz!QAZ etc -e  "INSERT LOCAL DIRECTORY '/data2/workspace/etc/resample_0509_a' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' select * from m06a TABLESAMPLE(5000 ROWS) where DetectionTime_O > '2015-1-01' and DetectionTime_O < '2015-2-01'"
