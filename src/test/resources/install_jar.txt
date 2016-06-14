@@ -1,0 +1,1 @@
+mvn install:install-file -DgroupId=tools.struct -DartifactId=javastruct -Dversion=0.1.0 -Dpackaging=jar -DgeneratePom=true -Dfile=D:\dev\workspace\bigdata.crawler\src\test\resources\javastruct-0.1.jar
