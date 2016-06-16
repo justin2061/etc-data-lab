@@ -1,0 +1,3 @@
+LOAD DATA LOCAL INFILE '/data2/workspace/etc/./all_csv/TDCS_M06A_20140101_000000.csv' INTO TABLE equity_last_import FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ',' LINES TERMINATED BY '\n' (VehicleType, DetectionTime_O, GantryID_O, DetectionTime_D, GantryID_D, TripLength, TripEnd, TripInformation)
+
+LOAD DATA LOCAL INFILE '/data2/workspace/etc/resample_0509/*' INTO TABLE equity_last_import FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ',' LINES TERMINATED BY '\n' (VehicleType, DetectionTime_O, GantryID_O, DetectionTime_D, GantryID_D, TripLength, TripEnd, TripInformation)
