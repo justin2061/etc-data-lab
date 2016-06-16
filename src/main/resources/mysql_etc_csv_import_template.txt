@@ -1,3 +1,12 @@
-LOAD DATA LOCAL INFILE '/data2/workspace/etc/./all_csv/TDCS_M06A_20140101_000000.csv' INTO TABLE equity_last_import FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ',' LINES TERMINATED BY '\n' (VehicleType, DetectionTime_O, GantryID_O, DetectionTime_D, GantryID_D, TripLength, TripEnd, TripInformation)
+#!/bin/bash
+MYSQL_CLI=`which mysql`
+DBUSER=etc_user
+DBPWD=1qaz!QAZ
+DBNAME=etc
 
-LOAD DATA LOCAL INFILE '/data2/workspace/etc/resample_0509/*' INTO TABLE equity_last_import FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ',' LINES TERMINATED BY '\n' (VehicleType, DetectionTime_O, GantryID_O, DetectionTime_D, GantryID_D, TripLength, TripEnd, TripInformation)
+for f in $(find . -name \*.csv -print); do
+ echo "File -> $(pwd)/$f"
+ $MYSQL_CLI -u$DBUSER -hlocalhost -p$DBPWD $DBNAME -e "LOAD DATA LOCAL INFILE '$(pwd)/$f' INTO TABLE M06A FIELDS OPTIONALLY ENCLOSED BY '\"' TERMINATED BY ',' LINES TER
+MINATED BY '\n' (VehicleType, DetectionTime_O, GantryID_O, DetectionTime_D, GantryID_D, TripLength, TripEnd, TripInformation)"
+ #sleep 1
+done
